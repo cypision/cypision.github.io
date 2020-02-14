@@ -107,9 +107,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "취미로 먹고사는 IT 개발자"
+  name             : "취미로 먹고 살고싶은 IT 개발자"
   avatar           : "/assets/images/data_scientist.jpg" 
-  bio              : "뭐든 방법은 있다, 실행(1) 아니면 (0) nothing일뿐"
+  bio              : "선택은 0 아니면 1 이더라.."
   location         : "South Korea"
   email            :
   links:

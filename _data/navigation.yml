@@ -1,6 +1,8 @@
-# main links
+﻿# main links
 main:
-  - title: "Contact to Blog"
+  - title: "Blog 탐험하기"
     url: https://cypision.github.io/
+  - title: "홈페이지 방문하기"
+    url: https://simple-cyber-jin.netlify.com//
   - title: "About"
     url: /about/
