@@ -1,5 +1,5 @@
 ---
-title:  "Neuralnet "
+title:  "Neuralnet Basic 01"
 excerpt: "Basic Neural Net using numpy,tensor-flow,keras"
 
 categories:
