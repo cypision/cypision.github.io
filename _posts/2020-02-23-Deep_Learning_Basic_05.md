@@ -1,4 +1,3 @@
-
 ---
 title:  "Neuralnet Basic 05"
 excerpt: "Basic Neural Net using numpy,tensor-flow,keras"
