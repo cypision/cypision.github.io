@@ -1,6 +1,6 @@
 ---
-title:  "Neuralnet Basic 03"
-excerpt: "Basic Neural Net using numpy,tensor-flow,keras"
+title:  'Neuralnet Basic 03'
+excerpt: 'Basic Neural Net using numpy,tensor-flow,keras'
 
 categories:
   - Deep-Learning

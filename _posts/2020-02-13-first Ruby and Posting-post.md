@@ -1,6 +1,6 @@
 ---
-title: "github.io 블로그 시작하기"
-excerpt: "GitHub Blog서비스인 github.io 블로그로 기록하는 삶을 보여준다"
+title: 'github.io 블로그 시작하기'
+excerpt: 'GitHub Blog서비스인 github.io 블로그로 기록하는 삶을 보여준다'
 
 categories:
   - Blog

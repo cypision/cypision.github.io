@@ -1,6 +1,6 @@
 ---
-title:  "Crawling 연습"
-excerpt: "Inflearn 강좌 따라하기 1"
+title:  'Crawling 연습'
+excerpt: 'Inflearn 강좌 따라하기 1'
 
 categories:
   - Machine-Learning

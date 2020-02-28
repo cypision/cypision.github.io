@@ -1,6 +1,6 @@
 ---
-title:  "Crawling 결과에 따른 Text분석"
-excerpt: "Inflearn 강좌 따라하기 2"
+title:  'Crawling 결과에 따른 Text분석'
+excerpt: 'Inflearn 강좌 따라하기 2'
 
 categories:
   - Machine-Learning
