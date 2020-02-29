@@ -5,7 +5,7 @@ main:
   - title: "Category"
     url: /categories/
   - title: "Tag"
-    url: /tag/
+    url: /tags/
   - title: "부동산 Blog 방문하기"
     url: https://blog.naver.com/100kky
   - title: "About"
