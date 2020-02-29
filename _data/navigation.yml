@@ -1,8 +1,12 @@
 ﻿# main links
 main:
-  - title: "Blog 탐험하기"
+  - title: "Home"
     url: https://cypision.github.io/
-  - title: "홈페이지 방문하기"
-    url: https://simple-cyber-jin.netlify.com//
+  - title: "Category"
+    url: /categories/
+  - title: "Tag"
+    url: /tag/
+  - title: "부동산 Blog 방문하기"
+    url: https://blog.naver.com/100kky
   - title: "About"
     url: /about/

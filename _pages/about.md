@@ -4,10 +4,14 @@ permalink: /about/
 layout: single
 ---
 
-## devinlfe.github.io 블로그
+### devinlfe.github.io 블로그
 
-이 블로그는 Github Pages 블로그 서비스인 github.io를 같이 만들어보는 샘플 블로그이다.
+이 블로그는 Mr.Cheong 의 개인블로그이다.  
+언제부터인가 직장을 은퇴하고 나서는, 나의 삶에서 뭔가 세상을 이롭게 하는 일을 하고 싶었다.  
+  
+그러다보니, 공부하고 찾아보게 되었고, 그런 부분을 보강하다 보니 어딘가에 기록을 하고 싶었다.  
+  
+여기에 남기를 글들이 누군가에게, 또한 나에게 어제보다 나은 오늘을 살게 하기를 소망한다.  
 
-진짜 블로그인 <https://devinlife.com>을 방문해보자.
-이 곳에서 이 샘플 블로그를 같이 만들어보는 Github Pages 블로그 따라하기 시리즈의
-모든 글을 볼 수 있다.
+### 개인정보
+> email : cypision1211@gmail.com
