@@ -806,7 +806,7 @@ plt.show()
 ```
 
 
-![png]/assets/images/Deep_Learning_Basic_03/(output_64_0.png)
+![png](/assets/images/Deep_Learning_Basic_03/(output_64_0.png)
 
 
 
