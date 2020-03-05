@@ -1,6 +1,6 @@
 ---
-title:  'Neuralnet Basic 05'
-excerpt: 'Basic Neural Net using numpy,tensor-flow,keras'
+title:  "Neuralnet Basic 05"
+excerpt: "Basic Neural Net using numpy,tensor-flow,keras"
 
 categories:
   - Deep-Learning
@@ -9,7 +9,7 @@ tags:
   - Neuralnet Using keras
   - KEARS 창시자에게 배우는 딥러닝
   - 딥러닝
-last_modified_at: 2020-02-22T23:06:00-05:00
+last_modified_at: 2020-03-04T23:06:00-05:00
 ---
 
 KEARS 창시자에게 배우는 딥러닝 - 3장 -03 회귀문제
@@ -93,6 +93,7 @@ train_targets[0]
 
 
 일단 모든 data가 numeric으로 이루어져 있으며, 회귀문제로, 값을 추정하는 접근이 필요한다. 
+유명한 Boston 주택가격 회귀 예측인데, 샘플갯수가 적다.  
 여기서 볼 수 있듯이 404개의 훈련 샘플과 102개의 테스트 샘플이 있고 모두 13개의 수치 특성을 가지고 있습니다. 13개의 특성은 다음과 같습니다:  
 1. Per capita crime rate.
 2. Proportion of residential land zoned for lots over 25,000 square feet.
@@ -145,16 +146,18 @@ def build_model():
     model.add(layers.Dense(64,activation='relu',input_shape=(train_data.shape[1],)))
     model.add(layers.Dense(64,activation='relu'))
     model.add(layers.Dense(1)) ## 마지막층은 하나의 유닛을 가지고 있고, 활성화 함수가 없다. (선형층이라고 부름) 전형적인 스칼라 회귀를 위한 네트웍 구조이다.
-    model.compile(optimizer='rmsprop',loss='mse',metrics=['mse'])
+    model.compile(optimizer='rmsprop',loss='mse',metrics=['mae'])
     return model
 ```
+
+하기 식에서는 test_data, test_targets 는 둘다 사용하지 않는다. 온전히 train data만, validation 용으로 나누어서 사용할뿐.
 
 
 ```python
 import numpy as np
 
 k=4
-num_val_samples = len(train_data)//k
+num_val_samples = len(train_data)//k ## 나누기 몫만 구하기
 num_epochs = 100
 all_score = []
 for i in range(k):
@@ -167,17 +170,13 @@ for i in range(k):
     
     model = build_model()
     model.fit(partial_train_data,partial_train_targets,epochs=num_epochs,batch_size=1,verbose=0)
-    val_mse,val_mae = model.evaluate(val_data,val_targets,verbose=0)
+    val_mse,val_mae = model.evaluate(val_data,val_targets,verbose=0) ## validation 데이터 기준으로 평가한, loos 값과, metric 값 (여기선 mse)
+    if val_mse==val_mae:
+        print('kiss')
     all_score.append(val_mae)
 ```
 
     처리중인 폴드 # 0
-    WARNING:tensorflow:From C:\ProgramData\Anaconda3\envs\test\lib\site-packages\tensorflow\python\framework\op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
-    Instructions for updating:
-    Colocations handled automatically by placer.
-    WARNING:tensorflow:From C:\ProgramData\Anaconda3\envs\test\lib\site-packages\tensorflow\python\ops\math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
-    Instructions for updating:
-    Use tf.cast instead.
     처리중인 폴드 # 1
     처리중인 폴드 # 2
     처리중인 폴드 # 3
@@ -186,6 +185,7 @@ for i in range(k):
 
 ```python
 ## numpy 의 c_ 결합은 axis=1 로 결합한다. 위와는 다르다. 여기서 _c 에서, axis=1 넣으면 에러남
+## 상세한 내용은 내 BLOG의 다른글을 보면된다.
 np.c_[np.array([1,2,3]), np.array([4,5,6])]
 ```
 
@@ -206,7 +206,7 @@ np.mean(all_score)
 
 
 
-    12.34973011099466
+    2.4378505316701267
 
 
 
@@ -217,8 +217,17 @@ Keras Callback 함수
 
 
 ```python
+from keras import backend as K
+
+# 메모리 해제
+K.clear_session()
+```
+
+
+```python
 num_epochs = 500
 all_mae_histories = []
+
 for i in range(k):
     print('처리중인 폴드 #', i)
     # 검증 데이터 준비: k번째 분할
@@ -238,31 +247,167 @@ for i in range(k):
     # 케라스 모델 구성(컴파일 포함)
     model = build_model()
     # 모델 훈련(verbose=0 이므로 훈련 과정이 출력되지 않습니다)
-    history = model.fit(partial_train_data, partial_train_targets, ## 모델 fit 결과를 history로 받음
+    rslt = model.fit(partial_train_data, partial_train_targets, ## 모델 fit 결과를 history로 받음
                         validation_data=(val_data, val_targets),
-                        epochs=num_epochs, batch_size=100, verbose=0)
-    print(type(history)) ## <class 'keras.callbacks.History'>
+                        epochs=num_epochs, batch_size=1, verbose=0)
+#     print(type(rslt)) ## <class 'keras.callbacks.History'>
+    history = rslt.history
+#     print(type(history),history.keys())
     mae_history = history['val_mean_absolute_error']
     all_mae_histories.append(mae_history)
 ```
 
     처리중인 폴드 # 0
-    <class 'keras.callbacks.History'>
+    처리중인 폴드 # 1
+    처리중인 폴드 # 2
+    처리중인 폴드 # 3
+    
+
+k fold 내 epoch 수(500) 만큼 .hisotory 객체에는 1회 epoch 가 끝났을때의, MAE 값을 찍음.  
+따라서, all_mae_histories 에는 500 * 4  만큼의 mae 값이 있음. 각 cross-fold 별 평균을 구하자
+
+
+```python
+print(type(all_mae_histories))
+print(len(all_mae_histories),len(all_mae_histories[0]))
+```
+
+    <class 'list'>
+    4 500
     
 
 
-    ---------------------------------------------------------------------------
+```python
+all_mae_histories[0][0],all_mae_histories[1][0],all_mae_histories[2][0],all_mae_histories[3][0]
+```
 
-    TypeError                                 Traceback (most recent call last)
 
-    <ipython-input-23-23e969752c59> in <module>
-         24                         epochs=num_epochs, batch_size=1, verbose=0)
-         25     print(type(history)) ## <class 'keras.callbacks.History'>
-    ---> 26     mae_history = history['val_mean_absolute_error']
-         27     all_mae_histories.append(mae_history)
+
+
+    (3.193030905015398, 4.005015722595819, 4.337651063900183, 5.760089798729019)
+
+
+
+
+```python
+[[x[i] for x in all_mae_histories] for i in range(2)]
+```
+
+
+
+
+    [[3.193030905015398, 4.005015722595819, 4.337651063900183, 5.760089798729019],
+     [2.7652973609395546,
+      3.0978137195700466,
+      3.2400667077243916,
+      3.745165466081978]]
+
+
+
+
+```python
+## 상기 cell 의 결과로 볼때, 맨 뒤의 for 문이 맨 겉의 for 문이고 안쪽의 for 문이 inner loop 쪽의 for 문이다. 
+average_mae_history = [np.mean([x[i] for x in all_mae_histories]) for i in range(num_epochs)] 
+```
+
+
+```python
+average_mae_history_01 = np.array(all_mae_histories).mean(axis=0)
+```
+
+
+```python
+average_mae_history[0] == average_mae_history_01[0]
+```
+
+
+
+
+    True
+
+
+
+
+```python
+import matplotlib.pyplot as plt
+```
+
+
+```python
+plt.plot(range(1, len(average_mae_history) + 1), average_mae_history)
+plt.xlabel('Epochs')
+plt.ylabel('Validation MAE')
+plt.show()
+```
+
+
+![png](/assets/images/Deep_Learning_Basic_05/output_31_0.png)
+
+
+#### 지수이동평균을 활용해서, 다시 그려본다.
+> 지수이동평균은 쉽게 얘기해서, 시계열 데이터에서 많이 사용하며, 특정 기간내의 값을 구할때  
+가장 최신의 데이터가 좀더 가중치를 더 많이 영향을 줄 수 있도록 하는 것이다.
+
+[지수이동평균 설명 Blog](https://m.blog.naver.com/PostView.nhn?blogId=gracekang7&logNo=221232491635&proxyReferer=https%3A%2F%2Fwww.google.com%2F)
+
+하기 함수에서는 이전에 계산된 이동 평균에 factor를 곱하고, 현재 포인트에 (1-factor)를 곱해 합산한 것을 가르킨다.
+
+
+```python
+def smooth_curve(points, factor=0.9):
+    smoothed_points = []
+    for point in points:
+        if smoothed_points:
+            previous = smoothed_points[-1]
+            smoothed_points.append(previous * factor + point * (1 - factor))
+        else:
+            smoothed_points.append(point)
+    return smoothed_points
+```
+
+
+```python
+smooth_mae_history = smooth_curve(average_mae_history[10:])
+```
+
+
+```python
+print(len(smooth_mae_history))
+plt.clf()   # 그래프를 초기화합니다
+plt.plot(range(1, len(smooth_mae_history) + 1), smooth_mae_history)
+plt.xlabel('Epochs')
+plt.ylabel('Validation MAE')
+plt.show()
+```
+
+    490
     
 
-    TypeError: 'History' object is not subscriptable
+
+![png](/assets/images/Deep_Learning_Basic_05/output_36_1.png)
 
 
-상기 코드 변경 필요
+
+```python
+# 새롭게 컴파인된 모델을 얻습니다
+model = build_model()
+# 전체 데이터로 훈련시킵니다
+model.fit(train_data, train_targets,
+          epochs=80, batch_size=16, verbose=0)
+test_mse_score, test_mae_score = model.evaluate(test_data, test_targets)
+```
+
+    102/102 [==============================] - 0s 509us/step
+   
+```python
+print(test_mse_score,test_mae_score)
+```
+
+    19.117207994648055 2.951353344262815
+    
+
+1. 회귀는 분류에서 사용했던 것과는 다른 손실 함수를 사용합니다. 평균 제곱 오차(MSE)는 회귀에서 자주 사용되는 손실 함수입니다.
+2. 비슷하게 회귀에서 사용되는 평가 지표는 분류와 다릅니다. 당연히 정확도 개념은 회귀에 적용되지 않습니다. 일반적인 회귀 지표는 평균 절대 오차(MAE)입니다.
+3. 입력 데이터의 특성이 서로 다른 범위를 가지면 전처리 단계에서 각 특성을 개별적으로 스케일 조정해야 합니다.
+4. 가용한 데이터가 적다면 K-겹 검증을 사용하는 것이 신뢰할 수 있는 모델 신뢰있게 평가 방법입니다.
+5. 가용한 훈련 데이터가 적다면 과대적합을 피하기 위해 은닉층의 수를 줄인 모델이 좋습니다(일반적으로 하나 또는 두 개).
