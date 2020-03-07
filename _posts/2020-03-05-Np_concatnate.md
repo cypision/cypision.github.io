@@ -21,6 +21,7 @@ Numpy libraray 에서, 배열을 붙이는 거에 대한 설명을 다루어 본
 
 3. 두 개의 1차원 배열을 칼럼으로 세로로 붙여서 2차원 배열 만들기
 
+
 출처: https://rfriend.tistory.com/352 [R, Python 분석과 프로그래밍의 친구 (by R Friend)]
 
 ## numpy.r_
