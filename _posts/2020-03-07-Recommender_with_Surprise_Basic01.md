@@ -19,6 +19,7 @@ last_modified_at: 2020-03-07T18:06:00-05:00
 > 2. [Medium susanLi](https://towardsdatascience.com/building-and-testing-recommender-systems-with-surprise-step-by-step-d4ba702ef80b)  
 > 3. [SusanLi github](https://github.com/susanli2016/Machine-Learning-with-Python/blob/master/Building%20Recommender%20System%20with%20Surprise.ipynb)
 > 4. [나름 추천 잘하는 사람일것 같은 사람의 github](https://github.com/bigsnarfdude/guide-to-data-mining)
+> 5. [Naber Lab Reseacher 초고수](http://sanghyukchun.github.io/31/)
 
 
 ```python
