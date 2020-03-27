@@ -10,7 +10,7 @@ tags:
   - 머신러닝
   - keras tokenizer
   - Word2Vec
-last_modified_at: 2020-03-27T10:13:00-05:00
+last_modified_at: 2020-03-28T08:07:00-05:00
 ---
 
 
@@ -436,7 +436,126 @@ for i in range(10,20):
     x_train 18째 데이터 길이 212
     x_train 19째 데이터 길이 177
     
+# pad_sequences 의 max_len 작동원리 파헤치기~~  
+> 책에서는 해당 sample 정수 index 의 빈도수(count) 수가 높은 순이라는데. 오타로 밝혀졌다.  
+> 그러나, 순서데로라 생각했지만, 실제 데이터가 변환되는 것을 통해 직접 확인한다.  
 
+x_train[11] 의 데이터를 토대로 확인
+
+
+```python
+## 도대체 max_len 설정이 순번데로일까? 아니면, count 빈도수데로 일까?
+np.unique(x_train[11]) ## 61개 unique
+max_len_what = {}
+for val in x_train[11]:
+    if val not in max_len_what.keys():
+        max_len_what[val] = 1
+    else :
+        max_len_what[val] += 1
+```
+
+
+```python
+max_len_what[36]
+```
+
+
+
+
+    1
+
+
+
+
+```python
+sorted(max_len_what, key=lambda x : max_len_what[x], reverse=True)[0:20]
+```
+
+
+
+
+    [4,
+     13,
+     6,
+     20,
+     12,
+     16,
+     31,
+     7,
+     18,
+     9,
+     54,
+     14,
+     21,
+     329,
+     379,
+     100,
+     549,
+     1,
+     1610,
+     69]
+
+
+
+
+```python
+rslt
+```
+
+
+```python
+# 리스트를 (samples, maxlen) 크기의 2D 정수 텐서로 변환합니다.
+x_train_a = preprocessing.sequence.pad_sequences(x_train, maxlen=20)
+x_test_a = preprocessing.sequence.pad_sequences(x_test, maxlen=maxlen)
+```
+
+
+```python
+x_train[11][-20:] ## maxlen = 1 이면, x_train_a[11] 에는 457 만 있는 것을 확인했다.
+```
+
+
+
+
+    [31,
+     155,
+     36,
+     100,
+     763,
+     379,
+     20,
+     103,
+     351,
+     5308,
+     13,
+     202,
+     12,
+     2241,
+     5,
+     6,
+     320,
+     46,
+     7,
+     457]
+
+
+
+
+```python
+x_train_a[11]
+```
+
+
+
+
+    array([  31,  155,   36,  100,  763,  379,   20,  103,  351, 5308,   13,
+            202,   12, 2241,    5,    6,  320,   46,    7,  457])
+
+
+
+# 드디어 밝혀진, pad_sequences 의 max_len 작동원리  
+## max_len 은 빈도수대로, squence 를 뽑는 것이 아니다.
+## max_len 은 원 데이터의 뒤에서의 순번대로, 즉 뒤에서부터 해당 단어를 들고 오는 것이다.
 
 ```python
 # 리스트를 (samples, maxlen) 크기의 2D 정수 텐서로 변환합니다.
@@ -504,7 +623,8 @@ model.summary()
     
 
 **Embedding(10000, 8, input_length=maxlen)** 이란 것은 실제 input 에 들어가는 sequence_length (여기선 20) 과 관계없이, Embedding 공간을 10000 * 8 로 만든다는 의미이다.  
-당연히 현재 sample 들은 max_length 가 20 이니, 해당되는 20 을 제외한 차원은 모두 0 으로 패딩될 것 이다. -- 내 생각
+당연히 현재 sample 들은 max_length 가 20 이니, 해당되는 20 을 제외한 차원은 모두 0 으로 될것이다. - padding 의 개념은 아니다.  
+또한, max_length=20 의 의미는 순서데로, 20번째까지만의 sequence를 불러온다는 뜻이다.
 
 
 ```python
