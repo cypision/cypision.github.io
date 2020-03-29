@@ -1,5 +1,5 @@
 ---
-title:  "혼자하는 Text분석_05"
+title:  "Text Analyis Word2Vec"
 excerpt: "Keras에서 Embedding 이후, RNN적용한 Text 분석 비교"
 
 categories:

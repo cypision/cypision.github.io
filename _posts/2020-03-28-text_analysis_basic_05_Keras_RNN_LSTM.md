@@ -1,12 +1,12 @@
 ---
-title:  "혼자하는 Text분석_05"
+title:  "Text Analyis using RNN and LSTM in keras"
 excerpt: "Sckit-lean library 과 Keras를 사용한 Text 분석 비교"
 
 categories:
   - Machine-Learning
 tags:
   - Keras
-  - text anlysis
+  - Text Analyis
   - RNN
   - LSTM  
 last_modified_at: 2020-03-28T16:13:00-05:00

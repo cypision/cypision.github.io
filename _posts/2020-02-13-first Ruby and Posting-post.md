@@ -9,12 +9,5 @@ tags:
 last_modified_at: 2020-02-13T13:42:00-05:00
 ---
 
-GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
-GitHub Blog 서비스의 이름은 Pages이다.
-
-Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
-다른 사람들도 같이 많이 사용했으면 좋겠다는 생각이 든다.
-
-YFM에서 정의한 제목을 이중 괄호 구문으로 본문에 추가할 수 있다.
-이 글의 제목은 {{ page.title }}이고
-마지막으로 수정된 시간은 {{ page.last_modified_at }}이다.
+GitHub Blog 서비스인 github.io 블로그 시작.
+난생 처음 하는 Blog 로 기대도 되고, 기록장으로서도 활용할 생각에 기쁘다.

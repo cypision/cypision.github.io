@@ -1,5 +1,5 @@
 ---
-title:  "혼자하는 Text분석_03"
+title:  "Text Analyis Basic using Scikit-Learn and KoNLPy (python 텍스트 분석 03)"
 excerpt: "Sckit-lean library 과 Keras를 사용한 Text 분석 비교"
 
 categories:

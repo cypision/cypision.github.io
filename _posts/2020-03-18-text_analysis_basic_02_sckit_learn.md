@@ -1,6 +1,6 @@
 ---
-title:  "혼자하는 Text분석_02"
-excerpt: "Sckit-lean library 과 Keras를 사용한 Text 분석 비교"
+title:  "Text Analyis Basic using Scikit-Learn (python 텍스트 분석 02)"
+excerpt: "Sckit-learn library 과 Keras를 사용한 Text 분석 비교"
 
 categories:
   - Machine-Learning
@@ -8,6 +8,7 @@ tags:
   - ML
   - text anlysis
   - 머신러닝
+  - Text Analysis Basic usuing Scikit-Learn
 last_modified_at: 2020-03-18T16:13:00-05:00
 ---
 
