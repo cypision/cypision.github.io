@@ -35,7 +35,7 @@ keras.__version__
 ### Cosine 데이터 만들기
 코사인 함수 image 기억하기 ㅋ
 
-![image.png](/assets/images/keras_time_series_practice/cosine.png)
+![image.png](/assets/images/keras_time_series_practice/cosine.PNG)
 
 
 ```python
