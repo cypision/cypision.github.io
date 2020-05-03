@@ -9,7 +9,7 @@ tags:
   - association rule
   - 장바구니 분석
   - 연관성 분석
-last_modified_at: 2020-04-19T21:15:45-05:00
+last_modified_at: 2020-05-03T21:15:45-05:00
 ---
 
 연관성분석은 흔히, '장바구니'분석으로 많이 알려져있다.  
@@ -1586,6 +1586,112 @@ mdf.head()
 
 
 ```python
+freq_items = apriori(mdf, min_support=0.07, use_colnames=True, verbose=1)
+freq_items
+```
+
+    Processing 156 combinations | Sampling itemset size 2
+    
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>support</th>
+      <th>itemsets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.093314</td>
+      <td>(98pct. Fat Free Hamburger)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.080088</td>
+      <td>(Onions)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.097722</td>
+      <td>(Potato Chips)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.092579</td>
+      <td>(Hot Dogs)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.109478</td>
+      <td>(2pct. Milk)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.122704</td>
+      <td>(Eggs)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.119030</td>
+      <td>(White Bread)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.077884</td>
+      <td>(Cola)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.079353</td>
+      <td>(Toothpaste)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.071271</td>
+      <td>(Hamburger Buns)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.077149</td>
+      <td>(Wheat Bread)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.085231</td>
+      <td>(Sweet Relish)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.074210</td>
+      <td>(Toilet Paper)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
 freq_items_01 = apriori(mdf, min_support=0.05, use_colnames=True, verbose=1)
 freq_items_01
 ```
@@ -1817,7 +1923,7 @@ freq_items_01
     <tr>
       <th>39</th>
       <td>0.052168</td>
-      <td>(Eggs, 2pct. Milk)</td>
+      <td>(2pct. Milk, Eggs)</td>
     </tr>
     <tr>
       <th>40</th>
@@ -1840,8 +1946,10 @@ freq_items_01
 print(freq_items.shape,freq_items_01.shape)
 ```
 
-    (33, 2) (42, 2)
+    (13, 2) (42, 2)
     
+
+over_support_lst : 날코딩으로 만든 0.07 이상일때의 빈번조합 갯수. mlxtend 와 값이 차이가 나는지 비교해보면, 아래 13과 같이 동일한 조합을 만들었음을 알 수 있다.
 
 
 ```python
@@ -1851,12 +1959,22 @@ print(len(over_support_lst))
     13
     
 
+### 쌩코딩결과와의 association_rules 비교
+
 min_support_0.07 로 했더니, 빈번집합이, 1개 그룹것만 나온다. 일단, 위에서 쌩코딩으로 구한것과 같다.  
 다만, 하기 association_rules 에서는 결과같이 위에와 좀 다르다.  
 
-쌩코딩으로 조출한 threshold 5.6 이상인 조합 결과
-
-over lift list  
+over confidence list : 0.53
+['Hamburger Buns'] => ['98pct. Fat Free Hamburger']: 0.6804123711340206  
+['Toothpaste'] => ['White Bread']: 0.6018518518518519  
+['Toothpaste'] => ['Eggs']: 0.5648148148148148  
+['Wheat Bread'] => ['White Bread']: 0.5619047619047619  
+['Wheat Bread'] => ['2pct. Milk']: 0.5523809523809524  
+['Sweet Relish'] => ['Hot Dogs']: 0.5517241379310344  
+['Toothpaste'] => ['2pct. Milk']: 0.5462962962962963  
+['Onions'] => ['White Bread']: 0.5321100917431193  
+-----------------  
+over lift list : 5.6  
 ['Hamburger Buns'] => ['98pct. Fat Free Hamburger']: 7.291663284357497  
 ['98pct. Fat Free Hamburger'] => ['Hamburger Buns']: 7.291663284357496  
 ['Hot Dogs'] => ['Sweet Relish']: 5.9594964422550625  
@@ -1864,10 +1982,17 @@ over lift list
 ['Toothpaste'] => ['Wheat Bread']: 5.640828924162257  
 ['Wheat Bread'] => ['Toothpaste']: 5.640828924162257  
 
+#### Rule 구하기
+
 
 ```python
-rules_01 = association_rules(freq_items_01, metric="lift", min_threshold=0.0001) ## 0.53 / 5.6
-rules_01.sort_values(by='lift',ascending=False).head()
+rule_rslt_conf = association_rules(freq_items, metric="confidence", min_threshold=0.01) ## 0.53
+rule_rslt_lift = association_rules(freq_items, metric="lift", min_threshold=1.0)  ## 5.6
+```
+
+
+```python
+rule_rslt_conf
 ```
 
 
@@ -1903,66 +2028,6 @@ rules_01.sort_values(by='lift',ascending=False).head()
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>0</th>
-      <td>(Potato Chips)</td>
-      <td>(White Bread)</td>
-      <td>0.097722</td>
-      <td>0.119030</td>
-      <td>0.051433</td>
-      <td>0.526316</td>
-      <td>4.421702</td>
-      <td>0.039801</td>
-      <td>1.859825</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>(White Bread)</td>
-      <td>(Potato Chips)</td>
-      <td>0.119030</td>
-      <td>0.097722</td>
-      <td>0.051433</td>
-      <td>0.432099</td>
-      <td>4.421702</td>
-      <td>0.039801</td>
-      <td>1.588793</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>(White Bread)</td>
-      <td>(2pct. Milk)</td>
-      <td>0.119030</td>
-      <td>0.109478</td>
-      <td>0.051433</td>
-      <td>0.432099</td>
-      <td>3.946889</td>
-      <td>0.038402</td>
-      <td>1.568093</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>(2pct. Milk)</td>
-      <td>(White Bread)</td>
-      <td>0.109478</td>
-      <td>0.119030</td>
-      <td>0.051433</td>
-      <td>0.469799</td>
-      <td>3.946889</td>
-      <td>0.038402</td>
-      <td>1.661576</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>(Eggs)</td>
-      <td>(2pct. Milk)</td>
-      <td>0.122704</td>
-      <td>0.109478</td>
-      <td>0.052168</td>
-      <td>0.425150</td>
-      <td>3.883414</td>
-      <td>0.038734</td>
-      <td>1.549137</td>
-    </tr>
   </tbody>
 </table>
 </div>
@@ -1971,7 +2036,60 @@ rules_01.sort_values(by='lift',ascending=False).head()
 
 
 ```python
-rules_01
+rule_rslt_lift
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+      <th>antecedent support</th>
+      <th>consequent support</th>
+      <th>support</th>
+      <th>confidence</th>
+      <th>lift</th>
+      <th>leverage</th>
+      <th>conviction</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+
+
+"freq_items" 집합으로 그렸을때, 도출되는 값이 없다. threshold 값을 낮추어도 마찬가지이다.  
+이는 freq_items이 2개이상 집합을 가진 frozen_set 이 없기 때문이다.
+
+
+```python
+rule_rslt_conf_01 = association_rules(freq_items_01, metric="confidence", min_threshold=0.04) ## 0.53
+rule_rslt_lift_01 = association_rules(freq_items_01, metric="lift", min_threshold=3.0) ## 0.53 / 5.6
+```
+
+
+```python
+rule_rslt_conf_01.sort_values(by='confidence',ascending=False)
 ```
 
 
@@ -2020,31 +2138,7 @@ rules_01
       <td>1.859825</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>(White Bread)</td>
-      <td>(Potato Chips)</td>
-      <td>0.119030</td>
-      <td>0.097722</td>
-      <td>0.051433</td>
-      <td>0.432099</td>
-      <td>4.421702</td>
-      <td>0.039801</td>
-      <td>1.588793</td>
-    </tr>
-    <tr>
       <th>2</th>
-      <td>(Eggs)</td>
-      <td>(2pct. Milk)</td>
-      <td>0.122704</td>
-      <td>0.109478</td>
-      <td>0.052168</td>
-      <td>0.425150</td>
-      <td>3.883414</td>
-      <td>0.038734</td>
-      <td>1.549137</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>(2pct. Milk)</td>
       <td>(Eggs)</td>
       <td>0.109478</td>
@@ -2068,16 +2162,16 @@ rules_01
       <td>1.661576</td>
     </tr>
     <tr>
-      <th>5</th>
+      <th>7</th>
       <td>(White Bread)</td>
-      <td>(2pct. Milk)</td>
+      <td>(Eggs)</td>
       <td>0.119030</td>
-      <td>0.109478</td>
-      <td>0.051433</td>
-      <td>0.432099</td>
-      <td>3.946889</td>
-      <td>0.038402</td>
-      <td>1.568093</td>
+      <td>0.122704</td>
+      <td>0.055107</td>
+      <td>0.462963</td>
+      <td>3.773010</td>
+      <td>0.040501</td>
+      <td>1.633586</td>
     </tr>
     <tr>
       <th>6</th>
@@ -2092,16 +2186,40 @@ rules_01
       <td>1.599152</td>
     </tr>
     <tr>
-      <th>7</th>
+      <th>1</th>
       <td>(White Bread)</td>
-      <td>(Eggs)</td>
+      <td>(Potato Chips)</td>
       <td>0.119030</td>
+      <td>0.097722</td>
+      <td>0.051433</td>
+      <td>0.432099</td>
+      <td>4.421702</td>
+      <td>0.039801</td>
+      <td>1.588793</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(White Bread)</td>
+      <td>(2pct. Milk)</td>
+      <td>0.119030</td>
+      <td>0.109478</td>
+      <td>0.051433</td>
+      <td>0.432099</td>
+      <td>3.946889</td>
+      <td>0.038402</td>
+      <td>1.568093</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(Eggs)</td>
+      <td>(2pct. Milk)</td>
       <td>0.122704</td>
-      <td>0.055107</td>
-      <td>0.462963</td>
-      <td>3.773010</td>
-      <td>0.040501</td>
-      <td>1.633586</td>
+      <td>0.109478</td>
+      <td>0.052168</td>
+      <td>0.425150</td>
+      <td>3.883414</td>
+      <td>0.038734</td>
+      <td>1.549137</td>
     </tr>
   </tbody>
 </table>
@@ -2109,19 +2227,9 @@ rules_01
 
 
 
-lift 를 구할때, 아예 도출이 되지 않는다....이유는 정확히는 모르겠지만, freq_items_01 집합은 최소 2개 조합이 나온 상태에서 값을 구할 수 있는 것으로 보인다.  
-최소지지도 그룹에서, 2개 조합이 4개가 나오니, 순서를 고려하여, 최종적으로 lift가 8개 도출되었다(4*2)  
-기본적으로  association_rules 은 빈번 그룹이 나오게 되었을때, 1개 그룹으로는 구하지 않는 것으로 보인다.  
-rules_02 = association_rules(freq_items_01, metric="lift", min_threshold=5.6) 하면, 나오는게 없다. nothing 이다.
-
 
 ```python
-rules_02 = association_rules(freq_items_01, metric="lift", min_threshold=5.6) 
-```
-
-
-```python
-rules_02
+rule_rslt_lift_01.sort_values(by='lift',ascending=False)
 ```
 
 
@@ -2157,6 +2265,102 @@ rules_02
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <th>0</th>
+      <td>(Potato Chips)</td>
+      <td>(White Bread)</td>
+      <td>0.097722</td>
+      <td>0.119030</td>
+      <td>0.051433</td>
+      <td>0.526316</td>
+      <td>4.421702</td>
+      <td>0.039801</td>
+      <td>1.859825</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(White Bread)</td>
+      <td>(Potato Chips)</td>
+      <td>0.119030</td>
+      <td>0.097722</td>
+      <td>0.051433</td>
+      <td>0.432099</td>
+      <td>4.421702</td>
+      <td>0.039801</td>
+      <td>1.588793</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(White Bread)</td>
+      <td>(2pct. Milk)</td>
+      <td>0.119030</td>
+      <td>0.109478</td>
+      <td>0.051433</td>
+      <td>0.432099</td>
+      <td>3.946889</td>
+      <td>0.038402</td>
+      <td>1.568093</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(2pct. Milk)</td>
+      <td>(White Bread)</td>
+      <td>0.109478</td>
+      <td>0.119030</td>
+      <td>0.051433</td>
+      <td>0.469799</td>
+      <td>3.946889</td>
+      <td>0.038402</td>
+      <td>1.661576</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(Eggs)</td>
+      <td>(2pct. Milk)</td>
+      <td>0.122704</td>
+      <td>0.109478</td>
+      <td>0.052168</td>
+      <td>0.425150</td>
+      <td>3.883414</td>
+      <td>0.038734</td>
+      <td>1.549137</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(2pct. Milk)</td>
+      <td>(Eggs)</td>
+      <td>0.109478</td>
+      <td>0.122704</td>
+      <td>0.052168</td>
+      <td>0.476510</td>
+      <td>3.883414</td>
+      <td>0.038734</td>
+      <td>1.675861</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>(White Bread)</td>
+      <td>(Eggs)</td>
+      <td>0.119030</td>
+      <td>0.122704</td>
+      <td>0.055107</td>
+      <td>0.462963</td>
+      <td>3.773010</td>
+      <td>0.040501</td>
+      <td>1.633586</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>(Eggs)</td>
+      <td>(White Bread)</td>
+      <td>0.122704</td>
+      <td>0.119030</td>
+      <td>0.055107</td>
+      <td>0.449102</td>
+      <td>3.773010</td>
+      <td>0.040501</td>
+      <td>1.599152</td>
+    </tr>
   </tbody>
 </table>
 </div>
@@ -2165,5 +2369,67 @@ rules_02
 
 
 ```python
-
+## 참고 : freq_items_01 에서, 2개집합 항목으로 구성된 물품들 (support : 0.05)
+freq_items_01[freq_items_01.itemsets.apply(lambda x : len(list(x))) > 1]
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>support</th>
+      <th>itemsets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>38</th>
+      <td>0.051433</td>
+      <td>(Potato Chips, White Bread)</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>0.052168</td>
+      <td>(2pct. Milk, Eggs)</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>0.051433</td>
+      <td>(2pct. Milk, White Bread)</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>0.055107</td>
+      <td>(Eggs, White Bread)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+__`association_rules` 을 구할때, confidence,lift 모두, 파라미터로 받는 조합이 1개 조합(=frozen_set 이 1개로만 구성된 조합)은 계산에서 제외된다.__  
+
+- freq_items 집합에서와 같이, 2개 조합이 없는 것들은 계산에서 제외되므로, 아무리 threshold값을 낮추어도, 도출되는 rule 집합은 없다.
+- 반면, freq_items_01 집합 처럼 최소 2개 조합이 나온 상태에서 값을 구할 수 있는 것으로 보인다.  
+
+> freq_items_01 기준으로 보면,  
+최소지지도 그룹에서, 2개 조합이 4개가 나오니, 순서를 고려하여, 최종적으로 lift가 8개 도출되었다(4*2)  
+기본적으로  association_rules 은 빈번 그룹이 나오게 되었을때, 1개 그룹으로는 구하지 않는 것으로 보인다.
