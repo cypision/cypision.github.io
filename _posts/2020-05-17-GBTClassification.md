@@ -90,7 +90,7 @@ Log(odds) 를 사용하는 이유는 추측컨데, Log(odds) 자체가 logistic 
 0.7 + (learning rate * -0.7) 일텐데 확률이란 개념은 더하기, 빼기 연산의 개념이 아니다. 더욱이 initial predict 값은 Log(odds)를 통해 확률로 구현되었음을 기억하자  
 따라서, 예측값을 위해 현재의 Redidual (위 그림에서는 -0.7) 값을 다르게 표현해줘야 하는데 아래 식이 그 공식이다. 
 
-![image.png](/assets/images/GBTClassify/process_03.PNG)
+![image.png](/assets/images/GBTClassify/process_04.PNG)
 
 위 식을 거치면 -0.7 => -3.3 으로 변환이 된다.  
 나머지 값 역시 보면, [0.3,-0.7] => (0.3 + -0.7)/( (0.7*(1-0.7)+(0.7*(1-0.7) ) => -1 등이 된다.
