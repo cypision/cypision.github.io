@@ -305,7 +305,7 @@ u
 
 ## 1레벨일 경우
 
-![stack02.png](/assets/images/function02/stackNunstack01.png)
+![stack02picture.png](/assets/images/function02/stackNunstack01.PNG)
 
 
 ```python
