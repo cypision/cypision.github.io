@@ -19,6 +19,7 @@ from collections import OrderedDict
 from pandas import DataFrame
 import pandas as pd
 import numpy as np
+
 ```
 
 # Stack & Unstack
@@ -28,7 +29,7 @@ import numpy as np
 #### 기본적으로 stack - ustack 구조는 multi 에서 사용하는게 적절해 보이고, 1레벨에서는 주의해야 한다.
 #### 하기 그림은 기본적으로 2레벨임. 1레벨일때는 다름
 
-![stack.png](/assets/images/function02/stackNunstack.png)
+![stack.png](/assets/images/function02/stackNunstack.PNG)
 
 
 ```python
