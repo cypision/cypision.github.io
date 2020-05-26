@@ -1,4 +1,3 @@
-
 ---
 title:  "Titanic Anlysis using Stacking & compare accuracy with using normal sckit-learn"
 excerpt: "Stacking , Ensemble"
