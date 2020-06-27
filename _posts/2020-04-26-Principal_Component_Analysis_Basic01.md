@@ -192,7 +192,7 @@ pca_data.shape
 
 `여기서 얻어지는 pca_data 는 각각의 주성분사용하여, 원래 데이터를 선형변환한 값이다.`
 
-![image.png](/assets/images/PCA/pca01.png)
+![image.png](/assets/images/PCA/pca01.PNG)
 
 pca_data 는 상기 그림에서 e 매트릭스들을 곱한값이라고 여기면 된다.
 실제 e 에 해당하는 값은 pca.components_ 다.  
