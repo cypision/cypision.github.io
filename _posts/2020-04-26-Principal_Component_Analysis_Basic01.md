@@ -14,6 +14,8 @@ last_modified_at: 2020-04-26T21:15:00-05:00
 
 ## Principal component analysis  
 ### reference  
+- PCA 개념관련_01 : https://ratsgo.github.io/from%20frequency%20to%20semantics/2017/04/06/pcasvdlsa/
+- PCA 개념관련_02 : https://darkpgmr.tistory.com/104
 - 코드관련 : StatQuest youtube - "PCA in Python" 을 참고하여 진행했다
 - 포아송분포관련 blog : https://blog.naver.com/PostView.nhn?blogId=mykepzzang&logNo=220840724901
 
@@ -125,6 +127,19 @@ import warnings
 warnings.filterwarnings(action='ignore')
 ```
 
+## 공분산(Covariance) 와 상관계수(Correlation) 관계  
+[공분산행렬 유도 상세](https://ratsgo.github.io/linear%20algebra/2017/03/14/operations/)
+
+변수가 여러개인 다변량데이터에선 변수 간 관련성, 즉 상관성(correlation) 이 매우 중요하다.  
+확률변수X의 값이 X의 평균보다 클때, Y의 값도  Y의 평균보다 커지고, X의 값이 X의 평균보다 작을때에는 Y의 값도 Y의 평균보다 작아지는 경향이 있으면 표준화된 X와Y의 곱인 상관계수(correlation coefficietnt)는 양의 값을 가질 가능성이 크다. 쉽게 표현하면, 두 확률변수의 직선관계가 얼마나 강하고, 어떤방향인지를 나타내는 값이라고 볼 수 있다.  
+
+확률변수 X와 Y의 상관계수와 공분산은 다음과 같이 정의되는데  **공분산을 X,Y의 표준편차로 나누어 표준화한 값이 X와 Y의 상관관게라 할 수 있다.**  
+(N=데이터 개수, u1=X의 평균, u2=Y의 평균, s1=X의 표준편차, s2=Y의 표준편차)
+
+![image.png](/assets/images/PCA/pca02.PNG)
+
+![image.png](/assets/images/PCA/pca03.PNG)
+
 ## Perform PCA on the data
 
 센터화 + scaling 하는 부분은 어떤 library를 사용해도 상관없다.
@@ -142,25 +157,8 @@ scaled_data01 = sc.fit_transform(data01)
 scaled_data00[0:2,0:4]
 ```
 
-
-
-
     array([[ 1.00688443,  1.74565139,  0.96960136, -1.02401425],
            [ 0.98558598,  0.31838925,  0.95951536, -1.07725589]])
-
-
-
-
-```python
-scaled_data01[0:2,0:4]
-```
-
-
-
-
-    array([[ 1.00688443,  1.74565139,  0.96960136, -1.02401425],
-           [ 0.98558598,  0.31838925,  0.95951536, -1.07725589]])
-
 
 
 sklearn.decomposition.PCA(n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0, iterated_power='auto', random_state=None)  
@@ -178,20 +176,35 @@ pca.fit(scaled_data01) # do the math => eigen decomposition 이 이루어진다.
 pca_data = pca.transform(scaled_data01) # get PCA coordinates for scaled_data
 ```
 
+#### columns(=feature) 에 대해서, 공분산행렬을 구하기 때무에, pca.get_covariance().shape 가 100 by 100 이다.
+
+```python
+print("origin scaled_data01: ",scaled_data01.shape)
+print("covariance: ",pca.get_covariance().shape) 
+```
+    origin scaled_data01:  (10, 100)
+    covariance:  (100, 100) 
+```python
+pca.get_covariance()[0][0:5]
+```
+    array([ 1.11111111, -1.10191122, -1.10690911,  1.10075591, -1.07435228])
+
+```python
+np_cov = np.cov(scaled_data00,rowvar=False)
+print(np_cov.shape)
+print(np_cov[0][0:5])
+```
+    (100, 100)
+    [ 1.11111111 -1.10191122 -1.10690911  1.10075591 -1.07435228]
 
 ```python
 pca_data.shape
 ```
-
-
-
-
     (10, 10)
 
 
-
-`여기서 얻어지는 pca_data 는 각각의 주성분사용하여, 원래 데이터를 선형변환한 값이다.`
-
+`여기서 얻어지는 pca_data 는 각각의 주성분사용하여, 원래 데이터를 선형변환한 값이다.`  
+![image.png](/assets/images/PCA/pca05.PNG)  
 ![image.png](/assets/images/PCA/pca01.PNG)
 
 pca_data 는 상기 그림에서 e 매트릭스들을 곱한값이라고 여기면 된다.
@@ -519,6 +532,7 @@ print(loading_scores[top_10_genes])
 
 위 결과에서 보면, 특정한 cell 이 PC1의 구성에 큰 영향을 주는 상태가 아니라, 모두 일정하게 영향을 주고 있는 것으로 보인다. 즉, 특별한 cell 이 영향을 미친다고 할 수 없다.
 
+
 ## Special PCA
 random.poisson 은 lam 다 값을 통하여, 랜덤하게 값을 뽑는데, 이때 lambda의 범위를 10 ~ 1000 으로 한다.  
 이걸 활용하여, 이 lambda 값을 활용하여, 포아송 분포에서, 랜덤하게 5(size=5)개를 추출한다. 
@@ -531,12 +545,109 @@ x3=np.array([7,8,1]).reshape(3,1)
 x4=np.array([8,4,5]).reshape(3,1)
 X=np.c_[x1,x2,x3,x4];X
 ```
-
-
-
-
     array([[ 1,  4,  7,  8],
            [ 2,  2,  8,  4],
            [ 1, 13,  1,  5]])
 
 
+
+## SVD (sigular Value Decomposition)
+
+지금까지의 내용으로 PCA 는 data-feature 들의 공분산을 eigien-decomposition 하는 것을 알았다.  
+그러나, PCA doc 에서는 svd 옵션이 계속 언급되어 의아하다.  
+실제로 PCA 파라미터 중 solcer='FULL' 선택시 scipy-linalg 라이브러리의 SVD를 활용한다고 되어 있어서, 실제로 수행비교해본다.
+
+
+```python
+from scipy import linalg
+```
+
+* `U` : Unitary matrix having left singular vectors as columns. Of shape (M, M) or (M, K), depending on full_matrices.
+
+* `s` : The singular values, sorted in non-increasing order. Of shape (K,), with K = min(M, N).
+
+* `Vh` : Unitary matrix having right singular vectors as rows. Of shape (N, N) or (K, N) depending on full_matrices.
+
+
+```python
+print(pca.get_covariance().shape)
+test_svd = pca.get_covariance()
+```
+
+    (100, 100)
+    
+
+
+```python
+U, s, Vh = linalg.svd(test_svd)
+U.shape,  s.shape, Vh.shape
+```
+    ((100, 100), (100,), (100, 100))
+
+
+
+
+```python
+print("feature 100개를 공분산행렬A이라 할때\n A Covariance(): shape{}".format(pca.get_covariance().shape))
+print(" A행렬의 고유벡터(eigen vactor) 행렬 P: {}".format(pca.components_.shape))
+print(" A행렬의 고유치(eigen value) 대각행렬 P: {}".format(np.diag(pca.explained_variance_).shape))
+```
+
+    feature 100개를 공분산행렬A이라 할때
+     A Covariance(): shape(100, 100)
+     A행렬의 고유벡터(eigen vactor) 행렬 P: (10, 100)
+     A행렬의 고유치(eigen value) 대각행렬 P: (10, 10)
+    
+
+
+```python
+len(pca.explained_variance_),'vs',len(s)
+```
+    (10, 'vs', 100)
+
+
+
+
+```python
+np.round(pca.explained_variance_,6)[8:],'vs',np.round(s,6)[8:14]
+```
+    (array([0.416716, 0.      ]),
+     'vs',
+     array([0.416716, 0.      , 0.      , 0.      , 0.      , 0.      ]))
+
+
+
+고유값행렬이 길이가 차이가 난다. -> 이는 PCA 에서, n_component param 값에 10 이 자동으로 들어갔기 때문이다.
+
+
+```python
+pca.components_[0,0:3]
+```
+    array([-0.105073  ,  0.10451952,  0.10492748])
+
+
+
+
+```python
+Vh[0,0:3]
+```
+    array([-0.105073  ,  0.10451952,  0.10492748])
+
+
+
+
+```python
+(np.round(U.T,0)==np.round(Vh,0)).sum()
+## 소숫점차이로 정확하지는 핞으나 100 by 100 10000 개 가 거의 일히한다고 볼 수 있다.
+```
+    9989
+
+
+
+**SVD와 PCA는 유사점**  
+- 둘 다, eigen-decomposition 을 기반으로 한다.  
+- feature 공분산 을 eigen-decomposition 하는 것이 PCA  
+- singular-value-decomposition 은 컨셉을 따라가면, 결국 PCA 결과와 완전 동일한다. 아래 증명참조!!  
+[SVD 와 PCA](https://ratsgo.github.io/from%20frequency%20to%20semantics/2017/04/06/pcasvdlsa/)  
+
+![image.png](/assets/images/PCA/pca04.PNG)
