@@ -3,10 +3,10 @@ title:  "Text Analyis Word2Vec"
 excerpt: "Keras에서 Embedding 이후, RNN적용한 Text 분석 비교"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - Keras
-  - text anlysis
+  - text analysis
   - 머신러닝
   - keras tokenizer
   - minsuk-heo youtube  

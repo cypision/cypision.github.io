@@ -3,7 +3,7 @@ title:  "Text Analyis Basic using Keras (keras.preprocessing.text)"
 excerpt: "Sckit-learn library 과 Keras를 사용한 Text 분석 비교"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - Keras
   - text anlysis

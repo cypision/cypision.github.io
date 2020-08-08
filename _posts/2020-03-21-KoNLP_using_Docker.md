@@ -3,10 +3,10 @@ title:  "KoNLP 설치하기 ubuntu 18.04 에서"
 excerpt: "Window 10 OS 다 보니...Docker로 해보기"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - Docker
-  - text anlysis
+  - text analysis
   - KoNLPy
 last_modified_at: 2020-03-21T16:13:00-05:00
 ---

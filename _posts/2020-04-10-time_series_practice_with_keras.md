@@ -3,7 +3,7 @@ title:  "keras를 이용한 시계열 분석 연습"
 excerpt: "Keras를 사용한 시계열 분석"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - Keras
   - Time Series Analysis

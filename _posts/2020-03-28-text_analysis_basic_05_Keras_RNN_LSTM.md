@@ -3,7 +3,7 @@ title:  "Text Analyis using RNN and LSTM in keras"
 excerpt: "Sckit-lean library 과 Keras를 사용한 Text 분석 비교"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - Keras
   - Text Analyis

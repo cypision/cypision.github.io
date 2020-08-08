@@ -3,10 +3,10 @@ title:  "Text Analyis Basic using Scikit-Learn and KoNLPy (python 텍스트 분�
 excerpt: "Sckit-lean library 과 Keras를 사용한 Text 분석 비교"
 
 categories:
-  - Machine-Learning
+  - Deep-Learning
 tags:
   - KoNLPy
-  - text anlysis
+  - text analysis
   - 머신러닝
   - linux docker
 last_modified_at: 2020-03-21T16:13:00-05:00
