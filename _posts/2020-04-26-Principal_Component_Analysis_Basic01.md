@@ -9,7 +9,7 @@ tags:
   - EigenDecomposition
   - Dimension reduction
   - Feature extraction
-last_modified_at: 2020-04-26T21:15:00-05:00
+last_modified_at: 2020-08-11T21:15:00-05:00
 ---
 
 ## Principal component analysis  
@@ -181,9 +181,11 @@ pca_data = pca.transform(scaled_data01) # get PCA coordinates for scaled_data
 ```python
 print("origin scaled_data01: ",scaled_data01.shape)
 print("covariance: ",pca.get_covariance().shape) 
+print("transformed_pca_data: {}".format(pca_data.shape))
 ```
     origin scaled_data01:  (10, 100)
-    covariance:  (100, 100) 
+    covariance:  (100, 100)
+    transformed_pca_data: (10, 10)
 ```python
 pca.get_covariance()[0][0:5]
 ```
@@ -198,9 +200,66 @@ print(np_cov[0][0:5])
     [ 1.11111111 -1.10191122 -1.10690911  1.10075591 -1.07435228]
 
 ```python
+pca.n_components_
+```
+    10
+
+```python
+pca.components_.shape ## return n_components, n_features
+```
+    (10, 100)
+
+```python
+pca.explained_variance_.shape
+```
+    (10,)
+
+```python
+np.diag(pca.explained_variance_).shape
+```
+    (10, 10)
+
+```python
 pca_data.shape
 ```
     (10, 10)
+
+```python
+print(scaled_data01.shape)
+print(pca.components_.T.shape)
+```
+
+    (10, 100)
+    (100, 10)
+    
+
+
+```python
+## 선형변환시, origin data 에 eigen_vector 를 곱하는 것이 맞다. 현재는 `full svd`로 설정되어 있다.
+print(len(pca.components_.T[:,0]))
+pca.components_.T[:,0] ## origin data 에 곱해지는, 0번째 열 이며, 이른바, pca_data로 선형변환시, 영향을 주는 컬럼
+```
+    100
+    array([ 0.10517707, -0.1053353 ,  0.07807005, -0.10511974,  0.10526787,
+            0.10174562, -0.10499361, -0.10515787,  0.10420382,  0.09989089,
+           -0.10480312,  0.10417483,  0.10210302, -0.10509173, -0.05229928,
+            0.10520354, -0.10470959, -0.10285261,  0.09955759,  0.10204285,
+           -0.1053555 ,  0.10240202, -0.10518406,  0.10194675,  0.10413774,
+            0.10459923,  0.1050895 ,  0.08840467, -0.10431386,  0.04062704,
+           -0.10470514, -0.10402665,  0.03245605,  0.10414164,  0.10523324,
+           -0.10519854,  0.09039167, -0.1012566 ,  0.10475594, -0.10526705,
+            0.07962781,  0.104411  ,  0.10170702, -0.06995814, -0.10517074,
+           -0.10485935, -0.10463511,  0.08646689,  0.10467528,  0.104817  ,
+            0.0985334 ,  0.10286331,  0.10456347, -0.10534329,  0.10526675,
+           -0.10363594, -0.10454192,  0.10414633, -0.10514162,  0.10217623,
+            0.1047548 , -0.10515004,  0.10531137, -0.05757229, -0.10497616,
+           -0.10484183,  0.10517106, -0.10512343,  0.09341379, -0.1050462 ,
+           -0.10466723,  0.10526068, -0.09979197,  0.10494096, -0.10377474,
+           -0.10528225,  0.10497286, -0.05593211, -0.10299393, -0.10502162,
+            0.10418594,  0.10400635, -0.10445421, -0.04304287, -0.10530917,
+            0.10484036, -0.10533412, -0.09298179,  0.08846383,  0.10522693,
+           -0.10521055, -0.10519723, -0.10532589, -0.09257281,  0.10535612,
+           -0.1051135 ,  0.09659575,  0.10492211, -0.10509957, -0.10524106])
 
 
 **여기서 얻어지는 pca_data 는 각각의 fit으로 구한 eigen_vector를 타겟행렬에 곱하여, 선형변환 시키는 것이다.**  
@@ -252,7 +311,7 @@ Equal to n_components largest eigenvalues of the covariance matrix of X.
 ## feature들의 공분산행렬
 print("feature 100개를 공분산행렬A이라 할때\n A Covariance(): shape{}".format(pca.get_covariance().shape))
 print(" A행렬의 고유벡터(eigen vactor) 행렬 P: {}".format(pca.components_.shape))
-print(" A행렬의 고유치(eigen value) 대각행렬 P: {}".format(np.diag(pca.explained_variance_).shape))
+print(" A행렬의 고유치(eigen value) 대각행렬 lambda diag: {}".format(np.diag(pca.explained_variance_).shape))
 ```
 
     feature 100개를 공분산행렬A이라 할때
@@ -280,13 +339,35 @@ print(rslt[0][0:5])
 
 `여기서 얻어지는 pca_data 는 각각의 주성분사용하여, 원래 데이터를 선형변환한 값이다.`
 
+```python
+["{:.3f}".format(x) for x in list(pca.explained_variance_)]
+```
+    ['99.991',
+     '2.829',
+     '2.138',
+     '1.775',
+     '1.449',
+     '0.921',
+     '0.906',
+     '0.646',
+     '0.456',
+     '0.000']
+
+
+```python
+per_var
+```
+    array([90. ,  2.5,  1.9,  1.6,  1.3,  0.8,  0.8,  0.6,  0.4,  0. ])
+
+
+```python
+labels
+```
+    ['PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9', 'PC10']
 
 ```python
 pca_df
 ```
-
-
-
 
 <div>
 <style scoped>
