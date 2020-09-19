@@ -379,7 +379,7 @@ pca04.components_
 
 #### np.linalg.svd 활용하기
 
-![image.png](/assets/images/PCA/pca06.png)
+![image.png](/assets/images/PCA/pca06.PNG)
 
 
 ```python
