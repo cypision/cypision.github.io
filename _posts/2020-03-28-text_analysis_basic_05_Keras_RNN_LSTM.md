@@ -74,10 +74,6 @@ final_output_sequence = np.stack(successive_outputs,axis=0)
 ```python
 final_output_sequence.shape
 ```
-
-
-
-
     (100, 64)
 
 
@@ -354,7 +350,7 @@ W -i,f,o,h 는 상기 게이ㅡ와 hidden 의 파라미터 행렬임을 명심�
 먼저 과거의 Cell(t-1) 의 값 앞에 ft 가 있는데, 이는 forget gate 값이고, forget gate 값 역시 ACTIVATION(WX+B) 으로 구해진다.  
 여기서 ACTIVATION 함수가 sigmoid (0~1) 이니, 나오는 값은 확률로 해석하여, 과거의 값을 몇 % 만 남기는 지에 대한 설명이라 할 수 있다.
 
-![image.png]/assets/images/text_keras_LSTM/lstm_full_01.png)
+![image.png](/assets/images/text_keras_LSTM/lstm_full_01.png)
 
 Ct 개념이 LSTM 의 핵심이니, 흐름을 Ct 중심으로 따라간다.
 Cell(hat t)  
