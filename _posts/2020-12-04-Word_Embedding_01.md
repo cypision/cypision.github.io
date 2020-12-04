@@ -18,7 +18,7 @@ last_modified_at: 2020-12-04T14:13:00-05:00
 (google colab 은 ubuntu라서 좀더 konlp가 쉽게 설치되는 것 같으니, 형태속 분석은 확실히 Colab에서~)
 
 ##### 연결link  
-(https://colab.research.google.com/github/cypision/Alchemy-in-MLDL/blob/master/DL_Area/Word_Embedding_01.ipynb)
+[colab](https://colab.research.google.com/github/cypision/Alchemy-in-MLDL/blob/master/DL_Area/Word_Embedding_01.ipynb)
 
 #### google 내 my drive 연동하기  
 하기 부분은 본인의 google drive를 연동하는 부분입니다.

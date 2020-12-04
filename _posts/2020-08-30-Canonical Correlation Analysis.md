@@ -34,11 +34,11 @@ __Why is CCA Useful?__
 
 2개의 vatiable set을 만들고, 이를 선형결합한 Vector들의 Pearson's Correlation 를 Maximize 한다
 
-![image.png](/assets/images/CCA/cca00.png)
+![image.png](/assets/images/CCA/cca00.PNG)
 
 The Canonical Correlation Coefficient is the correlation between the canonical variates CVX and CVY. See above picture
 
-![image.png](/assets/images/CCA/cca00_01.png)
+![image.png](/assets/images/CCA/cca00_01.PNG)
 
 ## play usint kaggle dataset (NYC schools dataset)  
 __Group 1: Environment Metrics__
@@ -161,7 +161,7 @@ print(X_sc.shape,Y_sc.shape)
     (1217, 6) (1217, 2)
     
 
-![image.png](/assets/images/CCA/cca01.png)
+![image.png](/assets/images/CCA/cca01.PNG)
 
 상기 그림은 CVx, CVy 를 만든 weight 이다.  원본 posting 에서는 상기 vector로 개별 변수들의 결과에 대한 영향력을 평가하는 것을 우려한다.  
 다중공선성과, 계수값은 개별변수X - Y의 관계를 설명해줄 뿐이라서이다.  
@@ -264,7 +264,7 @@ Math Score: CVX 와 Math Score 의 상관계수이다. 즉 ```정준교차 부�
 변수순서를 고려하면, Trust가 그중 긍정적인 포션을 차지하고 있음을 알 수 있다. 헌데, medium posting 에서는 계수값에 대한 해석을 자제하고 했다는 점을 유념해야 한다.
 
 
-![image.png](/assets/images/CCA/cca02.png)
+![image.png](/assets/images/CCA/cca02.PNG)
 
 ## X_sc 오리지널에, 정준상관계수 weight 구해진 행렬 역산하기
 
