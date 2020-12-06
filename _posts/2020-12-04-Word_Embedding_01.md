@@ -1,5 +1,5 @@
 ---
-title:  "Word Embedding using konlpy"  
+title:  "Word Embedding using konlpy 01"  
 excerpt: "Text Analysis"  
 
 categories:  
