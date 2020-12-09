@@ -292,7 +292,7 @@ naver_movie_CNN.summary()
 
 ## <span style='color:blue'> Conv1D 로 수행하는 텍스트분석 의미  </span>
 
-![image.png](/assets/images/PCA/cnn-for-sentence-classification-fig1.jpg)
+![image.png](/assets/images/keras_time_conv1d/cnn-for-sentence-classification-fig1.jpg)
 
 
 상기 그림을 간략히 설명하면,  
@@ -351,12 +351,12 @@ plot_graphs(history, "acc")
 plot_graphs(history, "loss")
 ```
 
-![image.png](/assets/images/PCA/output_33_0.png)    
+![image.png](/assets/images/keras_time_conv1d/output_33_0.png)    
    
 
 
 
-![image.png](/assets/images/PCA/output_33_1.png)        
+![image.png](/assets/images/keras_time_conv1d/output_33_1.png)        
     
 
 
@@ -556,7 +556,7 @@ labels = Dense(2, activation="softmax")(x)
     
     shape after concat   : (None, 256)
     
-![image.png](/assets/images/PCA/architeture_using_con1d.png)
+![image.png](/assets/images/keras_time_conv1d/architeture_using_con1d.png)
 
 
 ```python
@@ -595,12 +595,12 @@ plot_graphs(history, "acc")
 plot_graphs(history, "loss")
 ```
 
-![image.png](/assets/images/PCA/output_54_0.png)
+![image.png](/assets/images/keras_time_conv1d/output_54_0.png)
  
 
 
 
-![image.png](/assets/images/PCA/output_54_1.png)
+![image.png](/assets/images/keras_time_conv1d/output_54_1.png)
     
 
 
